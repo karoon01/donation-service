@@ -1,13 +1,18 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const config = require('config');
+const router = require('./routes');
+
+const PORT = config.get("port") ?? 8080;
 
 const app = express();
+app.use(express.json());
 
-const PORT = process.env.PORT ?? 8080;
+app.use('/api/v1', router);
 
 const start = async () => {
     try {
-        await mongoose.connect("mongodb+srv://karoon01:W3h9kFwHyeIzOlgB@projectdb.wyfz9nv.mongodb.net/?retryWrites=true&w=majority");
+        await mongoose.connect(config.get("mongoURI"));
 
         app.listen(PORT, () => {
             console.log(`Server has been started at port: ${PORT}`);

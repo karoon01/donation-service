@@ -1,13 +1,14 @@
-const User = require("../models/User");
+const User = require('../models/User');
 const {check, validationResult} = require('express-validator');
-const bcrypt = require("bcryptjs");
-
+const bcrypt = require('bcryptjs');
+const tokenService = require('../services/tokenService');
+const {generate} = require("../services/tokenService");
 
 const signUp = [
-    check("firstName").exists(),
-    check("lastName").exists(),
-    check("email").normalizeEmail().isEmail(),
-    check("password").exists().isLength({min: 8, max: 32}),
+    check('firstName').exists(),
+    check('lastName').exists(),
+    check('email').normalizeEmail().isEmail(),
+    check('password').exists().isLength({min: 8, max: 32}),
     async (req, res) => {
         try {
             const errors = validationResult(req);
@@ -38,9 +39,12 @@ const signUp = [
                 password: hashedPassword,
             });
 
+            const tokens = tokenService.generate(user._id);
+            await tokenService.save(user._id, tokens.refreshToken);
+
             res.status(201).send({
-                message: 'User created',
-                code: 201,
+               ...tokens,
+                userId: user._id,
             });
         } catch (error) {
             res.status(500).send({
@@ -90,9 +94,12 @@ const signIn = [
                 });
             }
 
-            //TODO: jwt send
-            res.status(200).send({
+            const tokens = tokenService.generate(user._id);
+            await tokenService.save(user._id, tokens.refreshToken);
 
+            res.status(200).send({
+                ...tokens,
+                userId: user._id,
             });
         } catch (error) {
             res.status(500).send({

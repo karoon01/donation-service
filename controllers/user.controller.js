@@ -1,5 +1,5 @@
-const User = require("../models/User");
-const e = require("express");
+const User = require('../models/User');
+const e = require('express');
 
 const getAllUsers = async (req, res) => {
     try {
@@ -18,6 +18,15 @@ const getAllUsers = async (req, res) => {
 const getUserById = async (req, res) => {
     try {
         const {userId} = req.params;
+
+        if (userId !== req.userId) {
+            return res.status(403).send({
+                error: {
+                    message: 'Forbidden',
+                    code: 403,
+                },
+            });
+        }
 
         const user = await User.findById({userId});
         if (!user) {
@@ -39,4 +48,37 @@ const getUserById = async (req, res) => {
     }
 };
 
-module.exports = {getUserById, getAllUsers};
+const updateUser = async (req, res) => {
+    try {
+        const {userId} = req.params;
+        if (userId !== req.userId) {
+            return res.status(403).send({
+                error: {
+                    message: 'Forbidden',
+                    code: 403,
+                },
+            });
+        }
+
+        const user = await User.findById({userId});
+        if (!user) {
+            return res.status(404).send({
+                error: {
+                    message: 'User doesn\'t exist',
+                    code: 404,
+                },
+            });
+        }
+        const updatedUser = await User.findByIdAndUpdate(userId, req.body, {new: true});
+        res.send(updatedUser);
+    } catch (error) {
+        res.status(500).send({
+            error: {
+                message: error.message,
+                code: 500,
+            },
+        });
+    }
+};
+
+module.exports = {getUserById, getAllUsers, updateUser};

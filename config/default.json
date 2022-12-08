@@ -1,0 +1,6 @@
+{
+  "port": 8080,
+  "mongoURI": "mongodb+srv://karoon01:W3h9kFwHyeIzOlgB@projectdb.wyfz9nv.mongodb.net/?retryWrites=true&w=majority",
+  "jwtAccessSecret": "Jwt access secret key",
+  "jwtRefreshSecret": "Jwt refresh secret key"
+}
