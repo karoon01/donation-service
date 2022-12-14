@@ -1,5 +1,5 @@
-const express = require("express");
-const mongoose = require("mongoose");
+const express = require('express');
+const mongoose = require('mongoose');
 const config = require('config');
 const router = require('./routes');
 
@@ -12,7 +12,7 @@ app.use('/api/v1', router);
 
 const start = async () => {
     try {
-        await mongoose.connect(config.get("mongoURI"));
+        await mongoose.connect(config.get('mongoURI'));
 
         app.listen(PORT, () => {
             console.log(`Server has been started at port: ${PORT}`);
@@ -24,4 +24,3 @@ const start = async () => {
 };
 
 start();
-

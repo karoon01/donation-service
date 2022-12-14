@@ -1,7 +1,7 @@
 {
   "name": "donation-service",
   "version": "1.0.0",
-  "description": "",
+  "description": "Donation Service",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
@@ -10,7 +10,7 @@
   "author": "Yosypchuk Bohdan <xblazeradd@gmail.com>",
   "license": "ISC",
   "dependencies": {
-    "bcryptjs": "^2.4.3",
+    "bcrypt": "^5.1.0",
     "config": "^3.3.8",
     "express": "^4.18.2",
     "express-validator": "^6.14.2",
@@ -18,6 +18,7 @@
     "mongoose": "^6.8.0"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^8.5.9",
     "nodemon": "^2.0.20"
   }
 }

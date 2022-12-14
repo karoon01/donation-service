@@ -1,9 +1,9 @@
 const {Schema, model} = require('mongoose');
 
-const schema = new Schema({
+const donation = new Schema({
     sum: {type: Number, required: true},
-    collection: {type: Schema.Types.ObjectId, ref: 'Collection', required: true},
+    assemblage: {type: Schema.Types.ObjectId, ref: 'Collection', required: true},
     user: {type: Schema.Types.ObjectId, ref: 'User', required: true},
 });
 
-module.exports = model('Donation', schema);
+module.exports = model('Donation', donation);
