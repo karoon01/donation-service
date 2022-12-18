@@ -2,14 +2,14 @@ const jwt = require('jsonwebtoken');
 const Token = require('../models/Token');
 const config = require('config');
 
-const generate = (userId) => {
+const generate = (userId, role) => {
     const accessToken = jwt.sign(
-        {userId: userId},
+        {userId: userId, role: role},
         config.get('jwtAccessSecret'),
         {expiresIn: '1h'});
 
     const refreshToken = jwt.sign(
-        {userId: userId},
+        {userId: userId, role: role},
         config.get('jwtRefreshSecret'));
 
     return {

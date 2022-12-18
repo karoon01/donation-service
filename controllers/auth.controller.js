@@ -43,7 +43,7 @@ const signUp = [
                 password: hashedPassword,
             });
 
-            const tokens = tokenService.generate(user._id);
+            const tokens = tokenService.generate(user._id, user.role);
             await tokenService.save(user._id, tokens.refreshToken);
 
             res.status(201).json({
@@ -89,7 +89,7 @@ const signIn = [
             }
 
             const isPasswordEqual = bcrypt.compare(password, user.password);
-            if(isPasswordEqual) {
+            if(!isPasswordEqual) {
                 return res.status(400).json({
                     error: {
                         message: 'Incorrect password',
@@ -98,7 +98,7 @@ const signIn = [
                 });
             }
 
-            const tokens = tokenService.generate(user._id);
+            const tokens = tokenService.generate(user._id, user.role);
             await tokenService.save(user._id, tokens.refreshToken);
 
             res.status(200).json({
