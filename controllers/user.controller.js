@@ -1,7 +1,10 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
+const sendEmail = require('../services/mailService')
 
 const SALT_ROUNDS = 10;
+const EMAIL_PASSWORD_SUBJECT = 'Password change';
+const EMAIL_PASSWORD_TEXT = 'Hello, your password has been changed!';
 
 const getAllUsers = async (req, res) => {
     try {
@@ -115,7 +118,7 @@ const changeUserStatus = async (req, res) => {
 
 const updatePassword = async (req, res) => {
     try {
-        const {email, newPassword} = req.body;
+        const {email, oldPassword, newPassword} = req.body;
 
         const candidate = await User.findOne({email: email});
         if (!candidate) {
@@ -127,11 +130,21 @@ const updatePassword = async (req, res) => {
             });
         }
 
-        const isPasswordEqual = await bcrypt.compare(newPassword, candidate.password);
-        if (isPasswordEqual) {
+        const isPasswordSimilar = oldPassword === newPassword;
+        if (isPasswordSimilar) {
             return res.status(400).json({
                 error: {
-                    message: 'New and current password are equal',
+                    message: 'Current and new password are equal',
+                    code: 400,
+                },
+            });
+        }
+
+        const isPasswordEqual = await bcrypt.compare(oldPassword, candidate.password);
+        if (!isPasswordEqual) {
+            return res.status(400).json({
+                error: {
+                    message: 'Entered old password and actual password doesn\'t match',
                     code: 400,
                 },
             });
@@ -139,6 +152,8 @@ const updatePassword = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(newPassword, SALT_ROUNDS);
         const updatedUser = await User.findOneAndUpdate({email: email}, {password: hashedPassword});
+
+        await sendEmail(email, EMAIL_PASSWORD_SUBJECT, EMAIL_PASSWORD_TEXT);
 
         res.send(updatedUser);
     } catch (error) {

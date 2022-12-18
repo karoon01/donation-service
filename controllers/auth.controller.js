@@ -2,9 +2,12 @@ const User = require('../models/User');
 const {check, validationResult} = require('express-validator');
 const bcrypt = require('bcrypt');
 const tokenService = require('../services/tokenService');
-const {generate} = require("../services/tokenService");
+const {generate} = require('../services/tokenService');
+const sendEmail = require('../services/mailService');
 
 const SALT_ROUNDS = 10;
+const EMAIL_WELCOME_SUBJECT = 'Welcome to Donation Service!';
+const EMAIL_WELCOME_TEXT = 'Welcome to our service! Your account has been successfully registered!';
 
 const signUp = [
     check('firstName', 'Fill first name below').exists(),
@@ -45,6 +48,8 @@ const signUp = [
 
             const tokens = tokenService.generate(user._id, user.role);
             await tokenService.save(user._id, tokens.refreshToken);
+
+            await sendEmail(email, EMAIL_WELCOME_SUBJECT, EMAIL_WELCOME_TEXT);
 
             res.status(201).json({
                ...tokens,

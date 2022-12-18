@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const config = require('config');
 const router = require('./routes');
 
-const PORT = config.get("port") ?? 8080;
+const PORT = config.get('port') ?? 8080;
 
 const app = express();
 app.use(express.json());

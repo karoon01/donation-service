@@ -49,10 +49,10 @@ const showAllCollectionDonations = async (req, res) => {
 };
 
 const createCollection = [
-    check('name').exists(),
-    check('description').exists(),
-    check('timeStart').exists(),
-    check('goalSum').exists(),
+    check('name', 'Fill collection name below').exists(),
+    check('description', 'Fill collection description below').exists(),
+    check('timeEnd', 'Fill collection end time').exists(),
+    check('goalSum', 'Fill collection goal sum').exists(),
     async (req, res) => {
         try {
             const errors = validationResult(req);
