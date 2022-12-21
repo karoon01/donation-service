@@ -12,6 +12,7 @@
   "author": "Yosypchuk Bohdan <xblazeradd@gmail.com>",
   "license": "ISC",
   "dependencies": {
+    "@mui/icons-material": "^5.11.0",
     "bcrypt": "^5.1.0",
     "concurrently": "^7.6.0",
     "config": "^3.3.8",
@@ -23,6 +24,8 @@
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^8.5.9",
-    "nodemon": "^2.0.20"
+    "eslint": "^8.30.0",
+    "nodemon": "^2.0.20",
+    "prettier": "^2.8.1"
   }
 }
