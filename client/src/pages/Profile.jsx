@@ -1,13 +1,13 @@
 import React from 'react';
 import {Grid} from "@mui/material";
-import Navbar from "../components/layout/Navbar";
-import Footer from "../components/layout/Footer";
-import ProfilePhoto from "../components/layout/ProfilePhoto";
-import ProfileSettingsSelector from "../components/layout/ProfileSettingsSelector";
-import ProfilePasswordRestore from "../components/layout/ProfilePasswordRestore";
+import Navbar from "../components/layout/navbar/Navbar";
+import Footer from "../components/layout/footer/Footer";
+import ProfilePhoto from "../components/layout/profile/ProfilePhoto";
+import ProfileSettingsSelector from "../components/layout/profile/ProfileSettingsSelector";
+import ProfilePasswordRestore from "../components/layout/profile/ProfilePasswordRestore";
 import {Navigate, Route, Routes} from "react-router-dom";
-import ProfilePersonal from "../components/layout/ProfilePersonal";
-import ProfileNotification from "../components/layout/ProfileNotification";
+import ProfilePersonal from "../components/layout/profile/ProfilePersonal";
+import ProfileNotification from "../components/layout/profile/ProfileNotification";
 
 function Profile() {
     return (

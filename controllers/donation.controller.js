@@ -20,7 +20,7 @@ const makeDonation = async (req, res) => {
         if (!collection) {
             return res.status(404).json({
                 error: {
-                    message: 'Collection not found',
+                    message: 'CollectionCard not found',
                     code: 404,
                 },
             });

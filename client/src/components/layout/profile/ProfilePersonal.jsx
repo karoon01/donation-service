@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, Card, CardContent, CardHeader, Divider, Grid, Select, TextField, Typography} from "@mui/material";
+import {Box, Button, Card, CardContent, CardHeader, Divider, Grid, Select, TextField, Typography} from "@mui/material";
 
 function ProfilePersonal() {
     return (
@@ -7,7 +7,8 @@ function ProfilePersonal() {
             sx={{
                 maxWidth: 700,
                 mt: 3,
-                ml: 3}}
+                ml: 3
+            }}
         >
             <CardHeader
                 title={'Your Profile'}
@@ -61,6 +62,13 @@ function ProfilePersonal() {
                             </Select>
                         </Grid>
                     </Grid>
+                    <Button
+                        type='submit'
+                        variant='contained'
+                        sx={{mt: 2, mb: 1}}
+                    >
+                        Update Settings
+                    </Button>
                 </Box>
             </CardContent>
         </Card>

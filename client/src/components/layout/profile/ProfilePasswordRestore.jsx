@@ -1,6 +1,6 @@
 import React from 'react';
 import {Box, Button, Card, CardContent, CardHeader, Divider, Grid, TextField, Typography} from "@mui/material";
-import PasswordInput from "../common/PasswordInput";
+import PasswordInput from "../../common/PasswordInput";
 
 function ProfilePasswordRestore() {
     return (

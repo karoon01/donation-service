@@ -104,7 +104,7 @@ const updateCollection = async (req, res) => {
         if (!candidate) {
             return res.status(404).json({
                 error: {
-                    message: 'Collection doesn\'t exist',
+                    message: 'CollectionCard doesn\'t exist',
                     code: 404,
                 },
             })
@@ -130,7 +130,7 @@ const endCollection = async (req, res) => {
         if (!candidate) {
             return res.status(404).json({
                 error: {
-                    message: 'Collection doesn\'t exist',
+                    message: 'CollectionCard doesn\'t exist',
                     code: 404,
                 },
             })
@@ -139,7 +139,7 @@ const endCollection = async (req, res) => {
         if (candidate.status === 'Done') {
             return res.status(400).json({
                 error: {
-                    message: 'Collection is already ended!',
+                    message: 'CollectionCard is already ended!',
                     code: 400,
                 }
             });
