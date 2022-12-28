@@ -2,15 +2,19 @@ const jwt = require('jsonwebtoken');
 const Token = require('../models/Token');
 const config = require('config');
 
-const generate = (userId, role) => {
+const generateTokens = async (userId, role) => {
     const accessToken = jwt.sign(
-        {userId: userId, role: role},
+        { userId: userId, role: role },
         config.get('jwtAccessSecret'),
-        {expiresIn: '1h'});
+        { expiresIn: '1h' }
+    );
 
     const refreshToken = jwt.sign(
-        {userId: userId, role: role},
-        config.get('jwtRefreshSecret'));
+        { userId: userId, role: role },
+        config.get('jwtRefreshSecret')
+    );
+
+    await Token.create({ userId: userId, refreshToken: refreshToken });
 
     return {
         accessToken,
@@ -18,30 +22,31 @@ const generate = (userId, role) => {
     };
 };
 
-const save = async (userId, refreshToken) => {
-    const existingToken = await Token.findOne({refreshToken});
+const regenerateAccessToken = (refreshToken) => {
+    try {
+        const decoded = jwt.verify(refreshToken, config.get('jwtRefreshToken'));
+        const newAccessToken = jwt.sign(
+            {
+                userId: decoded.userId,
+                role: decoded.role,
+            },
+            config.get('jwtAccessSecret'),
+            { expiresIn: '1h' }
+        );
 
-    if (existingToken) {
-        existingToken.refreshToken = refreshToken;
-        return existingToken.save();
+        return newAccessToken;
+    } catch (error) {
+        throw new Error('Invalid refresh token');
     }
-    return await Token.create({userId, refreshToken});
 };
 
 const verifyAccessToken = (accessToken) => {
     try {
-        jwt.verify(accessToken, config.get('jwtSecret'));
+        const data = jwt.verify(accessToken, config.get('jwtAccessToken'));
+        return data;
     } catch (error) {
         return null;
     }
 };
 
-const verifyRefreshToken = (refreshToken) => {
-    try {
-        jwt.verify(refreshToken, config.get('jwtSecret'));
-    } catch (error) {
-        return null;
-    }
-};
-
-module.exports = {generate, save, verifyAccessToken, verifyRefreshToken};
+module.exports = { generateTokens, regenerateAccessToken, verifyAccessToken };

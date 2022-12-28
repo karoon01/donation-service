@@ -39,19 +39,17 @@ const authorize = (roles = []) => {
         roles = [roles];
     }
 
-    return [
-        (req, res, next) => {
-            if (roles.length && !roles.includes(req.user.role)) {
-                return res.status(403).json({
-                    error: {
-                        message: 'Forbidden',
-                        status: 403,
-                    },
-                });
-            }
-            next();
-        },
-    ];
-}
+    return (req, res, next) => {
+        if (roles.length && !roles.includes(req.user.role)) {
+            return res.status(403).json({
+                error: {
+                    message: 'Forbidden',
+                    status: 403,
+                },
+            });
+        }
+        next();
+    };
+};
 
-module.exports = {authMiddleware, authorize};
+module.exports = { authMiddleware, authorize };

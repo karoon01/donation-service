@@ -1,36 +1,46 @@
 import React from 'react';
-import {FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput} from "@mui/material";
-import {Visibility, VisibilityOff} from "@mui/icons-material";
+import {
+    FormControl,
+    FormHelperText,
+    IconButton,
+    InputAdornment,
+    InputLabel,
+    OutlinedInput,
+} from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
-function PasswordInput({fullWidth, label, size, sx}) {
+const PasswordInput = React.forwardRef((props, ref) => {
     const [showPassword, setShowPassword] = React.useState(false);
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
     return (
         <FormControl
-            variant='outlined'
-            fullWidth={fullWidth}
-            size={size}
-            sx={sx}
+            variant="outlined"
+            fullWidth={props.fullWidth}
+            size={props.size}
+            sx={props.sx}
         >
-            <InputLabel htmlFor="outlined-adornment-password">{label}</InputLabel>
+            <InputLabel>{props.label}</InputLabel>
             <OutlinedInput
-                id='outlined-adornment-password'
+                label={props.label}
+                value={props.value}
+                onChange={(event) => props.onChange(event.target.value)}
+                error={props.error}
                 type={showPassword ? 'text' : 'password'}
-                label={label}
                 endAdornment={
-                <InputAdornment position='end'>
-                    <IconButton
-                        onClick={handleClickShowPassword}
-                        edge='end'
-                    >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                </InputAdornment>
+                    <InputAdornment position="end">
+                        <IconButton
+                            onClick={handleClickShowPassword}
+                            edge="end"
+                        >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                    </InputAdornment>
                 }
             />
+            <FormHelperText error>{props.helperText}</FormHelperText>
         </FormControl>
     );
-}
+});
 
 export default PasswordInput;
