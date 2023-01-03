@@ -32,7 +32,7 @@ const signUp = [
                 });
             }
 
-            const { firstName, lastName, email, password } = req.body;
+            const { firstName, lastName, email, password, role } = req.body;
 
             const candidate = await User.findOne({ email });
             if (candidate) {
@@ -50,6 +50,7 @@ const signUp = [
                 lastName: lastName,
                 email: email,
                 password: hashedPassword,
+                role: role,
             });
 
             const tokens = await tokenService.generateTokens(

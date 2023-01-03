@@ -5,9 +5,14 @@ import {
     Button,
     Checkbox,
     Container,
+    FormControl,
     FormControlLabel,
+    FormHelperText,
+    FormLabel,
     Grid,
     Link,
+    Radio,
+    RadioGroup,
     TextField,
     Typography,
 } from '@mui/material';
@@ -33,6 +38,7 @@ function SignUp() {
             lastName: '',
             email: '',
             password: '',
+            role: 'BaseUser',
         },
         mode: 'onChange',
     });
@@ -161,6 +167,32 @@ function SignUp() {
                                         error={!!errors.password}
                                         helperText={errors.password?.message}
                                     />
+                                )}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sx={{ ml: 1 }}>
+                            <Controller
+                                name="role"
+                                control={control}
+                                render={({ field }) => (
+                                    <FormControl>
+                                        <FormLabel>Role</FormLabel>
+                                        <RadioGroup row {...field}>
+                                            <FormControlLabel
+                                                value="BaseUser"
+                                                control={<Radio />}
+                                                label="User"
+                                            />
+                                            <FormControlLabel
+                                                value="Organizer"
+                                                control={<Radio />}
+                                                label="Organizer"
+                                            />
+                                        </RadioGroup>
+                                        <FormHelperText>
+                                            Choose account's role
+                                        </FormHelperText>
+                                    </FormControl>
                                 )}
                             />
                         </Grid>

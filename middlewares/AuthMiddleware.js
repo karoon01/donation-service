@@ -2,7 +2,7 @@ const tokenService = require('../services/tokenService');
 
 const authMiddleware = async (req, res, next) => {
     try {
-        const accessToken = req.headers.authorization?.split(' ')[1];
+        const accessToken = req.headers['authorization']?.split(' ')[1];
         if (!accessToken) {
             return res.status(401).json({
                 error: {
@@ -22,6 +22,7 @@ const authMiddleware = async (req, res, next) => {
             });
         }
         req.userId = data.userId;
+        req.userRole = data.role;
 
         next();
     } catch (error) {
@@ -40,7 +41,7 @@ const authorize = (roles = []) => {
     }
 
     return (req, res, next) => {
-        if (roles.length && !roles.includes(req.user.role)) {
+        if (roles.length && !roles.includes(req.userRole)) {
             return res.status(403).json({
                 error: {
                     message: 'Forbidden',

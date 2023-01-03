@@ -14,7 +14,14 @@ const generateTokens = async (userId, role) => {
         config.get('jwtRefreshSecret')
     );
 
-    await Token.create({ userId: userId, refreshToken: refreshToken });
+    const existingToken = await Token.findOne({ userId });
+
+    if (existingToken) {
+        existingToken.refreshToken = refreshToken;
+        existingToken.save();
+    } else {
+        await Token.create({ userId, refreshToken });
+    }
 
     return {
         accessToken,
@@ -24,7 +31,10 @@ const generateTokens = async (userId, role) => {
 
 const regenerateAccessToken = (refreshToken) => {
     try {
-        const decoded = jwt.verify(refreshToken, config.get('jwtRefreshToken'));
+        const decoded = jwt.verify(
+            refreshToken,
+            config.get('jwtRefreshSecret')
+        );
         const newAccessToken = jwt.sign(
             {
                 userId: decoded.userId,
@@ -42,7 +52,7 @@ const regenerateAccessToken = (refreshToken) => {
 
 const verifyAccessToken = (accessToken) => {
     try {
-        const data = jwt.verify(accessToken, config.get('jwtAccessToken'));
+        const data = jwt.verify(accessToken, config.get('jwtAccessSecret'));
         return data;
     } catch (error) {
         return null;

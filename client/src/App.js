@@ -1,4 +1,6 @@
 import './App.css';
+import { Route, Routes } from 'react-router-dom';
+
 import Profile from './pages/Profile';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
@@ -8,7 +10,6 @@ import CollectionsPage from './pages/CollectionsPage';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Collection from './pages/Collection';
-import { Route, Routes } from 'react-router-dom';
 import OrganizerCollection from './pages/OrganizerCollection';
 
 function App() {

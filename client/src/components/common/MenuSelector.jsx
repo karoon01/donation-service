@@ -10,6 +10,7 @@ function MenuSelector({ sections }) {
             {sections.map((section) => (
                 <>
                     <ListItemButton
+                        key={section.id}
                         selected={index === section.id}
                         color={index === section.id ? 'primary' : undefined}
                         onClick={() => setIndex(section.id)}

@@ -1,6 +1,6 @@
 const Collection = require('../models/Collection');
 const Donation = require('../models/Donation');
-const {check, validationResult} = require('express-validator');
+const { check, validationResult } = require('express-validator');
 
 const showAllCollections = async (req, res) => {
     try {
@@ -21,21 +21,23 @@ const showAllCollections = async (req, res) => {
 
 const showAllCollectionDonations = async (req, res) => {
     try {
-        const {collectionId} = req.params;
+        const { collectionId } = req.params;
 
         const collection = await Collection.findById(collectionId);
         if (!collection) {
             return res.status(404).json({
                 error: {
-                    message: 'Assemblage doesn\'t exist',
+                    message: "Assemblage doesn't exist",
                     code: 404,
                 },
             });
         }
 
-        const donations = await Donation.find({collection: collectionId});
+        const donations = await Donation.find({ collection: collectionId });
         if (donations.length === 0) {
-            return res.send('Currently here is no one donation, but you could change it!');
+            return res.send(
+                'Currently here is no one donation, but you could change it!'
+            );
         }
         res.send(donations);
     } catch (error) {
@@ -51,7 +53,7 @@ const showAllCollectionDonations = async (req, res) => {
 const createCollection = [
     check('name', 'Fill collection name below').exists(),
     check('description', 'Fill collection description below').exists(),
-    check('timeEnd', 'Fill collection end time').exists(),
+    // check('date', 'Fill collection end time').exists(),
     check('goalSum', 'Fill collection goal sum').exists(),
     async (req, res) => {
         try {
@@ -65,10 +67,9 @@ const createCollection = [
                 });
             }
 
-            const {name, description, timeEnd, goalSum} = req.body;
-            const {userId} = req.params;
+            const { name, description, date, goalSum } = req.body;
 
-            const candidate = await Collection.findOne({name});
+            const candidate = await Collection.findOne({ name });
             if (candidate) {
                 return res.status(400).json({
                     message: 'Assemblage with this name is already exist',
@@ -79,9 +80,10 @@ const createCollection = [
             const newCollection = await Collection.create({
                 name: name,
                 description: description,
-                timeEnd: timeEnd,
+                timeStart: Date.now(),
+                timeEnd: date,
                 goalSum: goalSum,
-                owner: userId,
+                owner: req.userId,
             });
 
             res.send(newCollection);
@@ -98,19 +100,23 @@ const createCollection = [
 
 const updateCollection = async (req, res) => {
     try {
-        const {collectionId} = req.params;
+        const { collectionId } = req.params;
 
         const candidate = await Collection.findById(collectionId);
         if (!candidate) {
             return res.status(404).json({
                 error: {
-                    message: 'CollectionCard doesn\'t exist',
+                    message: "CollectionCard doesn't exist",
                     code: 404,
                 },
-            })
+            });
         }
 
-        const updatedCollection = await Collection.findByIdAndUpdate(collectionId, req.body, {new: true});
+        const updatedCollection = await Collection.findByIdAndUpdate(
+            collectionId,
+            req.body,
+            { new: true }
+        );
         res.send(updatedCollection);
     } catch (error) {
         res.status(500).json({
@@ -124,16 +130,16 @@ const updateCollection = async (req, res) => {
 
 const endCollection = async (req, res) => {
     try {
-        const {collectionId} = req.params;
+        const { collectionId } = req.params;
 
         const candidate = await Collection.findById(collectionId);
         if (!candidate) {
             return res.status(404).json({
                 error: {
-                    message: 'CollectionCard doesn\'t exist',
+                    message: "CollectionCard doesn't exist",
                     code: 404,
                 },
-            })
+            });
         }
 
         if (candidate.status === 'Done') {
@@ -141,10 +147,13 @@ const endCollection = async (req, res) => {
                 error: {
                     message: 'CollectionCard is already ended!',
                     code: 400,
-                }
+                },
             });
         }
-        const endedCollection = await Collection.findByIdAndUpdate(collectionId, {collectionStatus: 'Done'});
+        const endedCollection = await Collection.findByIdAndUpdate(
+            collectionId,
+            { collectionStatus: 'Done' }
+        );
         res.send(endedCollection);
     } catch (error) {
         res.status(500).json({
@@ -161,5 +170,5 @@ module.exports = {
     showAllCollections,
     createCollection,
     updateCollection,
-    endCollection
+    endCollection,
 };
