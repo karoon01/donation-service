@@ -21,6 +21,7 @@ function Navbar() {
             dispatch(logout());
         }
         window.localStorage.removeItem('accessToken');
+        window.localStorage.removeItem('refreshToken');
     };
 
     return (
@@ -63,6 +64,14 @@ function Navbar() {
                                 to="/about"
                             >
                                 <Typography variant="h6">About Us</Typography>
+                            </MuiLink>
+                            <MuiLink
+                                color="inherit"
+                                underline="none"
+                                component={Link}
+                                to="/settings"
+                            >
+                                <Typography variant="h6">Settings</Typography>
                             </MuiLink>
                             <Button
                                 variant="text"

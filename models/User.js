@@ -4,6 +4,7 @@ const user = new Schema({
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     phoneNumber: { type: String, required: false },
+    location: { type: String, required: false },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     role: {
